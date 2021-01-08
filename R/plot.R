@@ -11,7 +11,7 @@ plot_base = function() {
   plotly::layout(
     showlegend  = TRUE,
     legend = list(yanchor = "top", xanchor = "right", y = 0.99, x = 0.9,
-                  bgcolor = 'rgba(0,0,0,0)'),
+                  bgcolor = 'rgba(0,0,0,0)', font = list(size = 16)),
     xaxis = list(range = c(-5, 5)),
     yaxis = list(range = c(-5, 5)),
     dragmode = "pan",
@@ -19,7 +19,6 @@ plot_base = function() {
     font = list(family = "Arial")
   ) %>%
   plotly::animation_opts(
-    easing = 'linear',
     transition = 500,
     redraw = FALSE
   ) %>%

@@ -45,7 +45,10 @@ add_params = function(equations, id) {
 }
 
 remove_params = function(equations, id) {
-  params = equations$get_args_unique(id)
+  tryCatch({
+    params = equations$get_args_unique(id)
+  }, error = function(cnd) print("FAILED"))
+
   if (length(params) > 0) {
     lapply(paste0("#div_param_", params), removeUI)
   }

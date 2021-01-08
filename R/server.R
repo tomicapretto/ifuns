@@ -39,16 +39,20 @@ server = function(input, output, session) {
     )
 
     observeEvent(input[[paste0("btn_remove_", id)]], {
-      idx = which(rvs$ids == id)
-      rvs$names = rvs$names[-idx]
-      plot_remove_trace(idx, session)
-      removeUI(paste0("#", session$ns(paste0("div_", id))))
-      remove_params(equations, id)
-      equations$remove(id)
-      rvs$count = equations$count()
-    }, ignoreInit = TRUE)
 
-  }, priority = 1)
+      idx = which(rvs$ids == id)
+      rvs$ids = rvs$ids[-idx]
+
+      remove_params(equations, id)
+      plot_remove_trace(idx, session)
+
+      removeUI(paste0("#", session$ns(paste0("div_", id))))
+      equations$remove(id)
+
+      rvs$count = equations$count()
+    }, ignoreInit = TRUE, once = TRUE)
+
+  })
 
 
   listen_to_update = shiny::debounce(
@@ -61,10 +65,10 @@ server = function(input, output, session) {
   )
 
   observeEvent(listen_to_update(), {
-    argvals = as.list(vapply(paste0("param_", rvs$args), function(x) input[[x]], numeric(1)))
-    names(argvals) = rvs$args
-    data = equations$evaluate_all(argvals)
-    names(data) = NULL
+    req(rvs$count > 0)
+    args = lapply(paste0("param_", rvs$args), function(x) input[[x]])
+    names(args) = rvs$args
+    data = equations$evaluate_all(args)
     plot_update(data, session)
   }, ignoreInit = TRUE)
 

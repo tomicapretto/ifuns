@@ -30,7 +30,7 @@ Equations = R6::R6Class(
       self$equations[[id]]$evaluate(args)
     },
     evaluate_all = function(args) {
-      lapply(self$equations, function(x) x$evaluate(args))
+      unname(lapply(self$equations, function(x) x$evaluate(args)))
     },
     katex = function(id) {
       self$equations[[id]]$katex()
@@ -46,7 +46,9 @@ Equations = R6::R6Class(
       unique(unlist(lapply(eqs, function(x) x$get_args()), use.names = FALSE))
     },
     get_args_unique = function(id) {
-      setdiff(self$get_args(id), self$get_args_without_id(id))
+      x = tryCatch(self$get_args(id), error = function(cnd) print("x"))
+      y = tryCatch(self$get_args_without_id(id), error = function(cnd) print("y"))
+      setdiff(x, y)
     },
     count = function() {
       length(self$equations)
