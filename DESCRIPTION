@@ -24,4 +24,5 @@ Imports:
     katexR (>= 0.1),
     stringr (>= 1.4.0),
     plotly (>= 4.9.2.2),
-    magrittr
+    magrittr,
+    htmltools (>= 0.5.0)
