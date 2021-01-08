@@ -1,7 +1,7 @@
 server = function(input, output, session) {
 
   rvs = reactiveValues(args = NULL, count = 0, ids = character())
-  equations = Equations$new("x",  c(-10, 10))
+  equations = Equations$new("x",  c(-20, 20))
 
   output$plot = plotly::renderPlotly({
     plot_base()
@@ -31,7 +31,6 @@ server = function(input, output, session) {
     args = replicate(length(equations$get_args(id)), 2, simplify = FALSE)
     names(args) = equations$get_args(id)
 
-
     plot_add_trace(
       equations$evaluate(id, args),
       "plot",
@@ -52,14 +51,17 @@ server = function(input, output, session) {
   }, priority = 1)
 
 
-  listen_to_update = shiny::debounce(shiny::reactive({
-    req(rvs$count > 0)
-    req(unlist(sapply(paste0("param_", rvs$args), function(x) input[[x]])))
-    sapply(paste0("param_", rvs$args), function(x) input[[x]])
-  }), millis = 500)
+  listen_to_update = shiny::debounce(
+    shiny::reactive({
+      req(rvs$count > 0)
+      req(unlist(sapply(paste0("param_", rvs$args), function(x) input[[x]])))
+      sapply(paste0("param_", rvs$args), function(x) input[[x]])
+    }),
+    millis = 500
+  )
 
   observeEvent(listen_to_update(), {
-    argvals = as.list(vapply(paste0("param_", rvs$args), function(x) {input[[x]]}, numeric(1)))
+    argvals = as.list(vapply(paste0("param_", rvs$args), function(x) input[[x]], numeric(1)))
     names(argvals) = rvs$args
     data = equations$evaluate_all(argvals)
     names(data) = NULL

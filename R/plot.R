@@ -10,11 +10,13 @@ plot_base = function() {
   ) %>%
   plotly::layout(
     showlegend  = TRUE,
-    legend = list(yanchor="top", y=0.99, xanchor="left",x=0.01),
-    xaxis = list(range = c(-50, 50)),
-    yaxis = list(range = c(-50, 50)),
+    legend = list(yanchor = "top", xanchor = "right", y = 0.99, x = 0.9,
+                  bgcolor = 'rgba(0,0,0,0)'),
+    xaxis = list(range = c(-5, 5)),
+    yaxis = list(range = c(-5, 5)),
     dragmode = "pan",
-    colorway = COLORS
+    colorway = COLORS,
+    font = list(family = "Arial")
   ) %>%
   plotly::animation_opts(
     easing = 'linear',
@@ -45,7 +47,6 @@ plot_add_trace = function(data, plot_name, name, session) {
 }
 
 plot_remove_trace = function(idx, session) {
-  print("xd")
   plotly::plotlyProxy("plot", session) %>%
     plotly::plotlyProxyInvoke("deleteTraces", idx)
 }

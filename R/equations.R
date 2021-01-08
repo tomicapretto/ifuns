@@ -30,11 +30,7 @@ Equations = R6::R6Class(
       self$equations[[id]]$evaluate(args)
     },
     evaluate_all = function(args) {
-      l = lapply(self$equations, function(x) x$evaluate(args))
-      # x = as.vector(sapply(l, `[[`, 1))
-      # y = as.vector(sapply(l, `[[`, 2))
-      # data.frame("x" = x, "y" = y, "name" = rep(paste0("f", names(self$equations)), each = 1000))
-      l
+      lapply(self$equations, function(x) x$evaluate(args))
     },
     katex = function(id) {
       self$equations[[id]]$katex()
@@ -97,8 +93,8 @@ Equation = R6::R6Class(
   private = list(
     domain = NULL,
     get_domain = function(interval) {
-      # TODO: Call SimPy
-      private$domain = seq(interval[1], interval[2], length.out = 1000)
+      # TODO: Call SimPy?
+      private$domain = seq(interval[1], interval[2], length.out = 2048)
     }
   )
 )
